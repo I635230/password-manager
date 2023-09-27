@@ -7,13 +7,16 @@ option_message="次の選択肢から入力してください(Add Password/Get P
 echo "パスワードマネージャーへようこそ！"
 echo "$option_message"
 
+# option loop
 while : ; do
   read option
+  option=`echo "$option" | tr '[:upper:]' '[:lower:]'`
 
-  # 1. Add Password
-  if [ "$option" = "Add Password" ] ; then
+  ## 1. Add Password
+  if [ "$option" = "add password" ] ; then
     echo "サービス名を入力してください："
     read service_name
+    service_name=`echo "$service_name" | tr '[:upper:]' '[:lower:]'`        
     echo "ユーザー名を入力してください："
     read user_name
     echo "パスワードを入力してください："
@@ -22,10 +25,11 @@ while : ; do
     echo "パスワードの追加は成功しました"
     echo "$option_message"
 
-  # 2. Get Password
-  elif [ "$option" = "Get Password" ] ; then
+  ## 2. Get Password
+  elif [ "$option" = "get password" ] ; then
     echo "サービス名を入力してください："
     read service_name_sample
+    service_name_sample=`echo "$service_name_sample" | tr '[:upper:]' '[:lower:]'`        
     accord_flag="False"
     while read line ; do
     each_service_name=`echo "$line" | cut -d ':' -f1`
@@ -39,13 +43,14 @@ while : ; do
     if [ "$accord_flag" = "False" ] ; then
       echo "そのサービスは保存されていません。"
     fi
-    echo "$option_message"s
+    echo "$option_message"
 
-  # 3. Exit
-  elif [ "$option" = "Exit" ] ; then
+  ## 3. Exit
+  elif [ "$option" = "exit" ] ; then
     echo "Thank you!"
     break
   
+  ## 4. Exception
   else
     echo "入力が間違っています。Add Password/Get Password/Exit から入力してください。"
 
