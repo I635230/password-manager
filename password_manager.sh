@@ -11,7 +11,7 @@ while : ; do
   read option
 
   # 1. Add Password
-  if [ "$option" = "Add Password"] ; then
+  if [ "$option" = "Add Password" ] ; then
     echo "サービス名を入力してください："
     read service_name
     echo "ユーザー名を入力してください："
