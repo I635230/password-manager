@@ -2,13 +2,24 @@
 
 # variable declaration
 option_message="次の選択肢から入力してください(Add Password/Get Password/Exit)："
+option_message_2="入力が間違っています。Add Password/Get Password/Exit から入力してください。"
+option_flag="0" # 0:1st lap, 1:Add Password, 2:Get Password, 3:Exit, 4:Exception
 
 # welcome message
 echo "パスワードマネージャーへようこそ！"
-echo "$option_message"
 
 # option loop
 while : ; do
+  ## Option message
+  if [ "$option_flag" = "0" ] || [ "$option_flag" = "1" ] || [ "$option_flag" = "2" ] ; then
+    echo "$option_message"
+  elif [ "$option_flag" = "4" ] ; then
+    echo "$option_message_2"
+  else
+    echo "option_flag error"
+  fi
+
+  ## input
   read option
   option=`echo "$option" | tr '[:upper:]' '[:lower:]'`
 
@@ -23,7 +34,7 @@ while : ; do
     read password
     echo "$service_name:$user_name:$password" >> data.txt
     echo "パスワードの追加は成功しました"
-    echo "$option_message"
+    option_flag="1"
 
   ## 2. Get Password
   elif [ "$option" = "get password" ] ; then
@@ -43,16 +54,17 @@ while : ; do
     if [ "$accord_flag" = "False" ] ; then
       echo "そのサービスは保存されていません。"
     fi
-    echo "$option_message"
+    option_flag="2"
 
   ## 3. Exit
   elif [ "$option" = "exit" ] ; then
     echo "Thank you!"
+    option_flag="3"
     break
   
   ## 4. Exception
   else
-    echo "入力が間違っています。Add Password/Get Password/Exit から入力してください。"
+    option_flag="4"
 
   fi
 done
