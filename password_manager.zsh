@@ -22,7 +22,6 @@ while : ; do
   ## input
   read option
   option=`echo "$option" | tr '[:upper:]' '[:lower:]'`
-
   ## 1. Add Password
   if [ "$option" = "add password" ] ; then
     ### input
