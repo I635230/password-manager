@@ -52,7 +52,7 @@ while : ; do
       fi
     done < data.txt
     if [ "$accord_flag" = "False" ] ; then
-      echo "そのサービスは保存されていません。"
+      echo "そのサービスは登録されていません。"
     fi
     option_flag="2"
 
