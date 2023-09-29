@@ -25,6 +25,7 @@ while : ; do
 
   ## 1. Add Password
   if [ "$option" = "add password" ] ; then
+    ### input
     echo "サービス名を入力してください："
     read service_name
     service_name=`echo "$service_name" | tr '[:upper:]' '[:lower:]'`        
@@ -32,16 +33,27 @@ while : ; do
     read user_name
     echo "パスワードを入力してください："
     read password
-    echo "$service_name:$user_name:$password" >> data.txt
+    add_content="$service_name:$user_name:$password"
+
+    ### encrypt
+    origin_content=`gpg -d data.txt.gpg` 2> /dev/null
+    rm data.txt.gpg 2> /dev/null
+    echo "$origin_content\n$add_content" > data.txt
+    gpg -c data.txt
+    rm data.txt
     echo "パスワードの追加は成功しました"
     option_flag="1"
 
-  ## 2. Get Password
-  elif [ "$option" = "get password" ] ; then
+  ## 2. Get Passwords
+  elif [ "$option" = "get password" ] ; then  
+    ### input
     echo "サービス名を入力してください："
     read service_name_sample
     service_name_sample=`echo "$service_name_sample" | tr '[:upper:]' '[:lower:]'`        
     accord_flag="False"
+
+    ### decrypt and output
+    content=`gpg -d data.txt.gpg` 2> /dev/null
     while read line ; do
     each_service_name=`echo "$line" | cut -d ':' -f1`
       if [ "$service_name_sample" = "$each_service_name" ] ; then
@@ -50,7 +62,8 @@ while : ; do
         echo "パスワード：`echo "$line" | cut -d ':' -f3`"
         accord_flag="True"
       fi
-    done < data.txt
+    done < <(echo "$content")
+
     if [ "$accord_flag" = "False" ] ; then
       echo "そのサービスは登録されていません。"
     fi
